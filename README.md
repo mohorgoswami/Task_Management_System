@@ -1,6 +1,5 @@
 ## Task Management System with AI Integration
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)
 ![React](https://img.shields.io/badge/React-18.x-blue.svg)
 ![MongoDB](https://img.shields.io/badge/MongoDB-6.x-green.svg)
