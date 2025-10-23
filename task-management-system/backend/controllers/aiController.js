@@ -113,8 +113,19 @@ const summarizeTasks = async (req, res) => {
 // @access  Public
 const askQuestion = async (req, res) => {
   try {
-    const { projectId, question } = req.body;
-    
+    // Validate input
+    const { error } = questionValidationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation error',
+        error: error.details[0].message
+      });
+    }
+
+    const { projectId, question, taskId } = req.body;
+
+    // Get project
     const project = await Project.findById(projectId);
     if (!project) {
       return res.status(404).json({
@@ -123,7 +134,98 @@ const askQuestion = async (req, res) => {
       });
     }
 
-    const fallbackAnswer = `I can help you with your project "${project.name}". However, AI services are temporarily unavailable.`;
+    // Get tasks for analysis
+    const tasks = await Task.find({ project: projectId });
+    
+    // Intelligent fallback responses based on question content
+    const questionLower = question.toLowerCase();
+    let fallbackAnswer = '';
+
+    if (questionLower.includes('overdue') || questionLower.includes('late')) {
+      const overdueTasks = tasks.filter(task => 
+        task.dueDate && new Date(task.dueDate) < new Date() && task.status !== 'Done'
+      );
+      fallbackAnswer = overdueTasks.length > 0 
+        ? `You have ${overdueTasks.length} overdue task(s): ${overdueTasks.map(t => t.title).join(', ')}`
+        : 'No tasks are currently overdue. Great job staying on track!';
+        
+    } else if (questionLower.includes('progress') || questionLower.includes('complete')) {
+      const total = tasks.length;
+      const completed = tasks.filter(t => t.status === 'Done').length;
+      const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
+      fallbackAnswer = `Project "${project.name}" is ${progress}% complete (${completed}/${total} tasks finished).`;
+      
+    } else if (questionLower.includes('high priority') || questionLower.includes('urgent') || questionLower.includes('high')) {
+      const highPriorityTasks = tasks.filter(t => t.priority === 'High' && t.status !== 'Done');
+      fallbackAnswer = highPriorityTasks.length > 0
+        ? `You have ${highPriorityTasks.length} high priority task(s): ${highPriorityTasks.map(t => t.title).join(', ')}`
+        : 'No high priority tasks are pending. Well done!';
+        
+    } else if (questionLower.includes('medium priority') || questionLower.includes('medium')) {
+      const mediumPriorityTasks = tasks.filter(t => t.priority === 'Medium' && t.status !== 'Done');
+      fallbackAnswer = mediumPriorityTasks.length > 0
+        ? `You have ${mediumPriorityTasks.length} medium priority task(s): ${mediumPriorityTasks.map(t => t.title).join(', ')}`
+        : 'No medium priority tasks are pending.';
+        
+    } else if (questionLower.includes('low priority') || questionLower.includes('low')) {
+      const lowPriorityTasks = tasks.filter(t => t.priority === 'Low' && t.status !== 'Done');
+      fallbackAnswer = lowPriorityTasks.length > 0
+        ? `You have ${lowPriorityTasks.length} low priority task(s): ${lowPriorityTasks.map(t => t.title).join(', ')}`
+        : 'No low priority tasks are pending.';
+        
+    } else if (questionLower.includes('priority')) {
+      const priorities = {
+        High: tasks.filter(t => t.priority === 'High' && t.status !== 'Done').length,
+        Medium: tasks.filter(t => t.priority === 'Medium' && t.status !== 'Done').length,
+        Low: tasks.filter(t => t.priority === 'Low' && t.status !== 'Done').length
+      };
+      fallbackAnswer = `Priority breakdown: ${priorities.High} high priority, ${priorities.Medium} medium priority, ${priorities.Low} low priority tasks pending.`;
+        
+    } else if (questionLower.includes('in progress') || questionLower.includes('working')) {
+      const inProgressTasks = tasks.filter(t => t.status === 'In Progress');
+      fallbackAnswer = inProgressTasks.length > 0
+        ? `Currently ${inProgressTasks.length} task(s) in progress: ${inProgressTasks.map(t => t.title).join(', ')}`
+        : 'No tasks are currently in progress. Consider moving some tasks from "To Do"!';
+        
+    } else if (questionLower.includes('todo') || questionLower.includes('to do') || questionLower.includes('pending')) {
+      const todoTasks = tasks.filter(t => t.status === 'To Do');
+      fallbackAnswer = todoTasks.length > 0
+        ? `You have ${todoTasks.length} task(s) to start: ${todoTasks.slice(0, 5).map(t => t.title).join(', ')}${todoTasks.length > 5 ? '...' : ''}`
+        : 'No pending tasks! All tasks are either in progress or completed.';
+        
+    } else if (questionLower.includes('done') || questionLower.includes('finished') || questionLower.includes('completed')) {
+      const doneTasks = tasks.filter(t => t.status === 'Done');
+      fallbackAnswer = doneTasks.length > 0
+        ? `You have completed ${doneTasks.length} task(s): ${doneTasks.slice(0, 5).map(t => t.title).join(', ')}${doneTasks.length > 5 ? '...' : ''}`
+        : 'No tasks completed yet. Time to get started!';
+        
+    } else if (questionLower.includes('count') || questionLower.includes('how many')) {
+      fallbackAnswer = `Project "${project.name}" has ${tasks.length} total tasks: ${tasks.filter(t => t.status === 'To Do').length} to do, ${tasks.filter(t => t.status === 'In Progress').length} in progress, ${tasks.filter(t => t.status === 'Done').length} completed.`;
+      
+    } else if (questionLower.includes('which') || questionLower.includes('what tasks') || questionLower.includes('show me')) {
+      // Handle questions like "which one is medium", "what tasks are high priority", etc.
+      if (questionLower.includes('medium')) {
+        const mediumTasks = tasks.filter(t => t.priority === 'Medium');
+        fallbackAnswer = mediumTasks.length > 0
+          ? `Medium priority tasks: ${mediumTasks.map(t => `"${t.title}" (${t.status})`).join(', ')}`
+          : 'No medium priority tasks found.';
+      } else if (questionLower.includes('high')) {
+        const highTasks = tasks.filter(t => t.priority === 'High');
+        fallbackAnswer = highTasks.length > 0
+          ? `High priority tasks: ${highTasks.map(t => `"${t.title}" (${t.status})`).join(', ')}`
+          : 'No high priority tasks found.';
+      } else if (questionLower.includes('low')) {
+        const lowTasks = tasks.filter(t => t.priority === 'Low');
+        fallbackAnswer = lowTasks.length > 0
+          ? `Low priority tasks: ${lowTasks.map(t => `"${t.title}" (${t.status})`).join(', ')}`
+          : 'No low priority tasks found.';
+      } else {
+        fallbackAnswer = `Here are all tasks: ${tasks.map(t => `"${t.title}" (${t.status}, ${t.priority} priority)`).slice(0, 10).join(', ')}${tasks.length > 10 ? '...' : ''}`;
+      }
+      
+    } else {
+      fallbackAnswer = `I can help analyze your project "${project.name}" with ${tasks.length} tasks. Try asking about: project progress, overdue tasks, high priority items, task counts, or specific task statuses. AI services are temporarily unavailable, but I can provide intelligent insights based on your data!`;
+    }
     
     res.json({
       success: true,
@@ -131,7 +233,8 @@ const askQuestion = async (req, res) => {
         question,
         answer: fallbackAnswer,
         projectName: project.name,
-        aiStatus: 'fallback'
+        context: taskId ? 'specific-task' : 'all-tasks',
+        aiStatus: 'intelligent_fallback'
       }
     });
 
