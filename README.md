@@ -1,4 +1,4 @@
-# 🎯 Task Management System with AI Integration
+## Task Management System with AI Integration
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)
@@ -8,32 +8,32 @@
 
 A modern, full-stack task management application built with the MERN stack, featuring intelligent AI-powered insights and intuitive Kanban board functionality. Perfect for teams and individuals looking to streamline their project workflows with cutting-edge technology.
 
-## 🌟 **Key Features**
+**Key Features**
 
-### 📋 **Core Functionality**
+**Core Functionality**
 - **Intuitive Kanban Board**: Drag-and-drop task management with real-time updates
 - **Project Management**: Create, organize, and track multiple projects
 - **Task Lifecycle**: Complete task CRUD operations with status tracking
 - **Priority Management**: High, Medium, Low priority levels with visual indicators
 - **Due Date Tracking**: Smart deadline management with overdue detection
 
-### 🤖 **AI-Powered Intelligence**
+**AI-Powered Intelligence**
 - **Smart Project Summarization**: AI-generated project insights and progress analysis
 - **Natural Language Q&A**: Ask questions about your projects in plain English
 - **Intelligent Task Analysis**: Get AI-powered suggestions for task optimization
 - **Progress Insights**: Automated progress tracking and completion metrics
 - **Fallback Intelligence**: Smart responses even when AI services are unavailable
 
-### 🎨 **User Experience**
+**User Experience**
 - **Responsive Design**: Seamless experience across desktop, tablet, and mobile devices
 - **Real-time Updates**: Instant synchronization across all connected clients
 - **Dark/Light Theme**: User preference-based theme switching
 - **Intuitive Interface**: Clean, modern UI inspired by leading productivity tools
 - **Performance Optimized**: Fast loading times and smooth interactions
 
-## 🛠 **Technology Stack**
+**Technology Stack**
 
-### **Frontend**
+**Frontend**
 - **React.js 18.x**: Modern React with hooks and functional components
 - **React Router**: Client-side routing and navigation
 - **React Beautiful DnD**: Smooth drag-and-drop functionality
@@ -41,7 +41,7 @@ A modern, full-stack task management application built with the MERN stack, feat
 - **Lucide React**: Beautiful, customizable icons
 - **React Hot Toast**: Elegant notification system
 
-### **Backend**
+**Backend**
 - **Node.js**: JavaScript runtime for server-side development
 - **Express.js**: Fast, minimalist web framework
 - **MongoDB**: NoSQL database for flexible data storage
@@ -50,25 +50,25 @@ A modern, full-stack task management application built with the MERN stack, feat
 - **Helmet**: Security middleware for Express applications
 - **CORS**: Cross-origin resource sharing support
 
-### **AI Integration**
+**AI Integration**
 - **Google Generative AI (Gemini)**: Advanced AI capabilities for intelligent insights
 - **Natural Language Processing**: Understand and respond to user queries
 - **Intelligent Fallback System**: Maintain functionality without AI dependency
 
-### **Development & Deployment**
+**Development & Deployment**
 - **npm**: Package management
 - **dotenv**: Environment variable management
 - **Express Rate Limiting**: API protection and throttling
 - **Professional Error Handling**: Comprehensive error management system
 
-## 🚀 **Quick Start**
+**Quick Start**
 
-### **Prerequisites**
+**Prerequisites**
 - Node.js 18.x or higher
 - MongoDB Atlas account (or local MongoDB installation)
 - Google AI API key (optional, for AI features)
 
-### **Installation**
+**Installation**
 
 1. **Clone the repository**
 ```bash
@@ -119,7 +119,7 @@ npm start
 # Application runs on http://localhost:3000
 ```
 
-## 📊 **Project Structure**
+**Project Structure**
 
 ```
 task-management-system/
@@ -160,7 +160,7 @@ task-management-system/
 └── README.md
 ```
 
-## 🎯 **API Documentation**
+**API Documentation**
 
 ### **Project Endpoints**
 ```http
@@ -171,7 +171,7 @@ PUT    /api/projects/:id      # Update project
 DELETE /api/projects/:id      # Delete project
 ```
 
-### **Task Endpoints**
+**Task Endpoints**
 ```http
 GET    /api/tasks/project/:id # Get tasks by project
 POST   /api/tasks            # Create new task
@@ -181,16 +181,16 @@ PUT    /api/tasks/:id/status  # Update task status
 POST   /api/tasks/bulk-update # Bulk update task order
 ```
 
-### **AI Endpoints**
+**AI Endpoints**
 ```http
 POST   /api/ai/summarize      # Generate project summary
 POST   /api/ai/question       # Ask AI questions
 POST   /api/ai/suggestions    # Get task suggestions
 ```
 
-## 💡 **Usage Examples**
+**Usage Examples**
 
-### **AI Q&A Examples**
+**AI Q&A Examples**
 ```
 "What's the project progress?"
 → "Project 'Website Development' is 75% complete (6/8 tasks finished)."
@@ -208,7 +208,7 @@ POST   /api/ai/suggestions    # Get task suggestions
 - Drag tasks between "To Do", "In Progress", and "Done" columns
 - Real-time updates ensure team synchronization
 
-## 🔧 **Configuration**
+ **Configuration**
 
 ### **Database Setup**
 1. Create a MongoDB Atlas cluster or set up local MongoDB
@@ -220,7 +220,7 @@ POST   /api/ai/suggestions    # Get task suggestions
 2. Add the key to your `.env` file as `GEMINI_API_KEY`
 3. AI features will activate automatically when configured
 
-## 🛡 **Security Features**
+**Security Features**
 
 - **Helmet.js**: Security headers and protection
 - **Rate Limiting**: API endpoint protection
@@ -228,7 +228,7 @@ POST   /api/ai/suggestions    # Get task suggestions
 - **Error Handling**: Secure error responses without sensitive data exposure
 - **CORS Configuration**: Controlled cross-origin access
 
-## 🚀 **Deployment**
+**Deployment**
 
 ### **Backend Deployment (Heroku/Railway)**
 ```bash
@@ -247,7 +247,7 @@ npm run build
 REACT_APP_API_URL=your_backend_url
 ```
 
-## 🧪 **Testing**
+ **Testing**
 
 ```bash
 # Run backend tests
@@ -259,27 +259,8 @@ cd frontend
 npm test
 ```
 
-## 📈 **Performance Optimizations**
 
-- **MongoDB Indexing**: Optimized database queries
-- **React Optimization**: Memoization and efficient re-renders
-- **API Caching**: Intelligent caching strategies
-- **Bundle Optimization**: Code splitting and lazy loading
-- **Image Optimization**: Compressed and responsive images
-
-## 🤝 **Contributing**
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 **License**
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 **Acknowledgments**
+**Acknowledgments**
 
 - **React Team**: For the amazing React framework
 - **MongoDB**: For the flexible NoSQL database
@@ -287,14 +268,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Tailwind CSS**: For the utility-first CSS framework
 - **Open Source Community**: For the incredible tools and libraries
 
-## 📞 **Contact & Support**
 
-- **Developer**: [Mohor Goswami](https://github.com/mohorgoswami)
-- **Project Repository**: [Task Management System](https://github.com/mohorgoswami/Task_Management_System)
-- **Issues**: [Report Bug or Request Feature](https://github.com/mohorgoswami/Task_Management_System/issues)
 
----
 
-### 🌟 **Star this repository if you found it helpful!**
-
-Built with ❤️ using the MERN Stack and AI Integration
+Built with  using the MERN Stack and AI Integration
